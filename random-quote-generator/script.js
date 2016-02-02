@@ -42,12 +42,28 @@ $(document).ready(function() {
     {"quote": "If we did the things we are capable of, we would astound ourselves. ", "author": "Thomas Edison"}
   ];
 
-  $("#generate").click(function() {
+  var generateQuote = function() {
     this.quotes = quotes;
     var rand = Math.floor(Math.random() * quotes.length);
     var quote = quotes[rand];
 
     $("#quote").html(quote.quote);
     $("#author").html(quote.author);
+  };
+
+  $("#generate").click(generateQuote);
+
+  generateQuote();
+
+  /* Because of security concerns, we can't make a request using AJAX,
+     so we have to change the href attr during click */
+  $("#tweet").click(function() {
+    var quoteText = $("#quote").text();
+    var quoteAuthor = $("#author").text();
+
+    var tweet = (quoteText + " -" + quoteAuthor).replace(/\s/g, "%20");
+
+    $(this).attr("href", "https://twitter.com/intent/tweet?text=" + tweet);
   });
+
 });
